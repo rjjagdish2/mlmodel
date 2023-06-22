@@ -1,8 +1,6 @@
 import numpy as np
 import cv2
 import math
-import matplotlib.pyplot as plt
-from textblob import Word
 
 lines = []
 words = []
@@ -40,16 +38,6 @@ def verticalProjection(img):
         col = img[0:h, j:j+1] # y1:y2, x1:x2
         sumCols.append(np.sum(col))
     return sumCols
-
-
-
-# Functions to # print the images
-def myImPrt(img):
-    #tmp_img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-    plt.imshow(img)
-
-def myBWImPrt(img):
-    plt.imshow(img,cmap='gray')
 
 
 
@@ -146,22 +134,18 @@ def find_baseline_angle(image):
     angle_list = []
     # ref:   https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#ga9d7064d478c95d60003cf839430737ed
     filtered = bilateralFilter(image, 5, 50) # see how this works
-    myImPrt(filtered)
     # cv2.imshow('filtered',filtered)
     filtered.shape
     #thresh = threshold(filtered, 127)
     thresh = cv2.adaptiveThreshold(filtered, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 15, 5)
     # cv2.imshow('thresh',thresh)
-    myBWImPrt(thresh)
     thresh.shape
 
     # ref   https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html
     dilated = dilate(thresh, (5, 10))
-    myBWImPrt(dilated)
     dilated.shape
 
     dilated = dilate(thresh, (5, 50))
-    myBWImPrt(dilated)
     dilated.shape
 
 
@@ -169,7 +153,6 @@ def find_baseline_angle(image):
     im_tmp = image.copy()
     ctrs, heir = cv2.findContours(dilated.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(im_tmp,ctrs, -1, (36,255,12), 2)
-    myImPrt(im_tmp)
 
 
     min_area = 5000
@@ -178,7 +161,6 @@ def find_baseline_angle(image):
         if area > min_area:
     #         cv2.drawContours()
             cv2.drawContours(im_tmp,[c], 0, (36,255,12), 2)
-    myImPrt(im_tmp)
 
 
 
@@ -228,7 +210,6 @@ def find_baseline_angle(image):
         # creating list of angle of each contour to calculate varience
         angle_list.append(angle)
     #     # print(contour_count)
-    myImPrt(img)
 
     #myImPrt(tmp_img)
     cv2.imwrite("images/straightened.jpg", tmp_img)
@@ -438,14 +419,12 @@ def find_word_spacing(image):
     # ref:   https://docs.opencv.org/master/d4/d86/group__imgproc__filter.html#ga9d7064d478c95d60003cf839430737ed
 
     filtered = bilateralFilter(image, 5, 50) # see how this works
-    myImPrt(filtered)
     # cv2.imshow('filtered',filtered)
     filtered.shape
 
     #thresh = threshold(filtered, 127)
     thresh = cv2.adaptiveThreshold(filtered, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 15, 5)
     # cv2.imshow('thresh',thresh)
-    myBWImPrt(thresh)
     thresh.shape
 
     # Extraction of words from the lines using vertical projection
