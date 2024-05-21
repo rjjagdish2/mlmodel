@@ -253,6 +253,6 @@ def hello_world():
     return 'Dysgraphia prediction mode. Please hit the POST request along with image as a payload'
 
 if __name__ == '__main__':
-    app.run(port=3936)
+    app.run(port=7860)
 
 
